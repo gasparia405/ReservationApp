@@ -17,7 +17,9 @@ regForm.addEventListener('submit',
 
         // create li element and assign value
         const li = document.createElement('li');
-        li.textContent = nameInput;
+        const span = document.createElement('span');
+        span.textContent = nameInput;
+        li.appendChild(span);
 
         // create a checkbox that will indicate whether the guest is confirmed and 
         const checkBoxLabel = document.createElement('label');
@@ -26,6 +28,15 @@ regForm.addEventListener('submit',
         checkBoxLabel.textContent = 'Confirmed';
         checkBoxLabel.appendChild(checkBox);
         li.appendChild(checkBoxLabel);
+
+        // create an edit button to change names
+        const editButton = document.createElement('button');
+        editButton.textContent = 'Edit';
+        li.appendChild(editButton);
+
+        const removeButton = document.createElement('button');
+        removeButton.textContent = 'Remove';
+        li.appendChild(removeButton);
 
         // add entire li to ul
         ul.appendChild(li);
@@ -44,6 +55,49 @@ ul.addEventListener('change',
             li.className = 'responded';
         } else {
             li.className = '';
+        }
+    }
+);
+
+// split actions between edit and remove buttons
+ul.addEventListener('click',
+    (e) => {
+        // only perform actions on a button
+        if (e.target.tagName === 'BUTTON') {
+            // choose which button to perform actions on
+            const clickedButton = e.target.textContent;
+            // perform actions on edit button
+            if (clickedButton.toLowerCase() === 'edit') {
+                // create text input field
+                const textInput = document.createElement('input');
+                textInput.type = 'text';
+                // add name to text input
+                const li = e.target.parentNode;
+                const span = li.firstElementChild;
+                textInput.value = span.textContent;
+                // append text input to li after name span
+                li.insertBefore(textInput, span);
+                // change text of edit button to save
+                e.target.textContent = 'Save';
+                // remove span
+                li.removeChild(span);
+            } else if (clickedButton.toLowerCase() === 'save') {
+                const li = e.target.parentNode;
+                // create span element
+                const span = document.createElement('span');
+                // set text content to input's value
+                const textInput = li.firstElementChild;
+                span.textContent = textInput.value;
+                // append span to li after name textInput
+                li.insertBefore(span, textInput);
+                // change text of edit button to save
+                e.target.textContent = 'Edit';
+                // remove span
+                li.removeChild(textInput);
+            } else if (clickedButton.toLowerCase() === 'remove') {
+                const li = e.target.parentNode;
+                ul.removeChild(li);
+            }
         }
     }
 );
