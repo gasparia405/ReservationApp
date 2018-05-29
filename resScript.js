@@ -33,6 +33,38 @@ document.addEventListener('DOMContentLoaded', () => {
         return li;
     }
 
+    function setInvalidClass(element) {
+        element.className = 'invalid';
+    }
+
+    function resetClass(element) {
+        element.className = '';
+    }
+
+    function validateTextInput(formInput) {
+        const input = document.querySelector('form input');
+        const header = input.parentNode.parentNode;
+        const errorMessage = 'This is an invalid entry';
+        // text should not be empty
+        if (formInput === '') {
+            // change class name of input to invalid
+            setInvalidClass(input);
+            
+            const para = createElement('p', 'textContent', errorMessage);
+            setInvalidClass(para);
+            header.appendChild(para);
+            return false
+        }
+        // text should only contain letters
+        // text should not be in the list of invitees already
+
+        // text is valid
+        else {
+            resetClass(input)
+            return true
+        }
+    }
+
     // add event listener with anonymous function that looks at an event handler
     regForm.addEventListener('submit',
         (e) => {
@@ -41,10 +73,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // store text in variable
             const nameInput = formInput.value;
-            formInput.value = '';
 
-            // add entire li to ul
-            ul.appendChild(createLI(nameInput));
+            // if 
+            if (validateTextInput(nameInput)) {
+                formInput.value = '';
+
+                // add entire li to ul
+                ul.appendChild(createLI(nameInput));
+            } else {
+                validateTextInput(nameInput);
+            }
+            
         }
     );
 
